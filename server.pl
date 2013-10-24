@@ -43,7 +43,8 @@ foreach my $country (keys %phoneNumbers) {
     
     if($host)# == $nexmoHost) #lclc testen
     {
-    my ($type, $to, $msisdn,$networkcode,$messageId,$messageTimestamp,$text,$concat,$concatRef,$concatTotal,$concatPart) = (0);
+      no warnings 'uninitialized';
+      my ($type, $to, $msisdn,$networkcode,$messageId,$messageTimestamp,$text,$concat,$concatRef,$concatTotal,$concatPart) = (0);
       # See https://docs.nexmo.com/index.php/messaging-sms-api/handle-inbound-message
       $type = $self->param('type'); #Expected values are: text (URL encoded, valid for standard GSM, Arabic, Chinese ... characters) or binary
       $to = $self->param('to'); #Recipient number (your long virtual number).
@@ -78,7 +79,7 @@ foreach my $country (keys %phoneNumbers) {
       $SMS{$concatRef} = $SMS{$concatRef}.$text;
       if($concatPart == $concatTotal)
       {
-      #	lclc encode & push into Blockchain (or first into database ?)
+      #	lclc (encode and save in database ?)
 	sendTransaction($SMS{$concatRef});
 	delete $SMS{$concatRef};
       }
