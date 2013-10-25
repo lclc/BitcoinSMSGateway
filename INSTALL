@@ -1,0 +1,17 @@
+## Install Dependencies
+cpan local:lib
+cpan JSON::RPC::Client
+curl get.mojolicio.us | sh
+source ~/.bashrc (or restart shell)
+
+## Settings
+Change settings in server.pl
+
+## Run
+morbo server.pl -m production
+
+The default port server.pl uses is 3000. If you want to change that add -l http://127.0.0.1:80
+
+-l, --listen <location>        Set one or more locations you want to listen
+				on, defaults to the value of MOJO_LISTEN or
+				"http://*:3000".
