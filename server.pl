@@ -10,10 +10,11 @@ my $bitcoindPassword = 'MaEcGfpmwwR63PG6K4ADiMjxXwAL6Zg3eMLYZKg6HMg';  #Bitcoind
 my $bitcoindIP = 'localhost';
 my $bitcoindPort = 8332;
 
-my %phoneNumbers = (
+my %phoneNumbers = (  #generates a callback function for each number (e.g. http://yourserver.com:3000/Switzerland/)
 		      "Switzerland" => "041112223344",
 		      "USA" => "123456789"
 		    );
+my $debugMode = 1; # true (1) or false (2)
 ##################################################
 
 use strict;
@@ -31,7 +32,10 @@ $RPCClient->ua->credentials("$bitcoindIP:$bitcoindPort",
 			);
 my $RPC_URI = "http://$bitcoindIP:$bitcoindPort/";
 
-app->mode('production');
+if(!$debugMode)
+{
+  app->mode('production');
+}
 
 my %SMS;	# $SMS{concatRef} = "SMSContent"  (used to attach the parts of a splitted SMS)
 
@@ -59,22 +63,29 @@ foreach my $country (keys %phoneNumbers) {
       $concatTotal = $self->param('concat-total'); #The total number of parts in this concatenated message set
       $concatPart = $self->param('concat-part'); #The part number of this message within the set (starts at 1)
     
-      $self->render(text => " Country: $country</br>
-			      Nr: $phoneNumbers{$country}</br>
-			      Host: $host</br>
-			      </br>
-			      type: $type</br>
-			      to: $to</br>
-			      msisdn: $msisdn</br>
-			      network-code: $networkcode</br>
-			      messageId: $messageId</br>
-			      message-timestamp: $messageTimestamp</br>
-			      text: $text</br>
-			      concat: $concat</br>
-			      concat-ref: $concatRef</br>
-			      concat-total: $concatTotal</br>
-			      concat-part: $concatPart</br>
-			    ");
+      if($debugMode)
+      {
+	$self->render(text => " Country: $country</br>
+				Nr: $phoneNumbers{$country}</br>
+				Host: $host</br>
+				</br>
+				type: $type</br>
+				to: $to</br>
+				msisdn: $msisdn</br>
+				network-code: $networkcode</br>
+				messageId: $messageId</br>
+				message-timestamp: $messageTimestamp</br>
+				text: $text</br>
+				concat: $concat</br>
+				concat-ref: $concatRef</br>
+				concat-total: $concatTotal</br>
+				concat-part: $concatPart</br>
+			      ");
+      }
+      else
+      {
+	$self->render(text => "OK");
+      }
 			    
       $SMS{$concatRef} = $SMS{$concatRef}.$text;
       if($concatPart == $concatTotal)
