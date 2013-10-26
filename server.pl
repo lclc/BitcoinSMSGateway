@@ -14,6 +14,7 @@ my %phoneNumbers = (  #generates a callback function for each number (e.g. http:
 		      "Switzerland" => "041112223344",
 		      "USA" => "123456789"
 		    );
+
 my $debugMode = 1; # true (1) or false (2)
 ##################################################
 
@@ -21,6 +22,8 @@ use strict;
 use warnings;
 use Mojolicious::Lite;
 use JSON::RPC::Client;
+use Convert::Ascii85;
+use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
 use Data::Dumper;
 
 my $nexmoHost = "nexmo.com"; #lclc testen
@@ -90,8 +93,8 @@ foreach my $country (keys %phoneNumbers) {
       $SMS{$concatRef} = $SMS{$concatRef}.$text;
       if($concatPart == $concatTotal)
       {
-      #	lclc (encode and save in database ?)
-	sendTransaction($SMS{$concatRef});
+	
+	sendTransaction( decodeTransaction($SMS{$concatRef}) );
 	delete $SMS{$concatRef};
       }
     }
@@ -102,14 +105,27 @@ foreach my $country (keys %phoneNumbers) {
   };
 }
 
+sub decodeTransaction
+{
+  my $encodedTransaction = shift;
+  my $decodedTransaction;
+
+  $encodedTransaction = Convert::Ascii85::decode($encodedTransaction)
+    or print "decode ASCII85 failed: $!\n";
+  gunzip \$encodedTransaction => \$decodedTransaction
+    or print "gunzip failed: $GunzipError\n";
+  
+  return($decodedTransaction);
+}
+
 sub sendTransaction
 {
-  my $transactionHash = shift;
+  my $transaction = shift;
   
   my $sendObj = {
    #   method  => 'sendrawtransaction',
       method  => 'getinfo',
-   #   params  => $transactionHash
+   #   params  => $transaction
       params  => []
    };
    
