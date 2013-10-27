@@ -1,6 +1,9 @@
 ## Install Dependencies
+cpan ExtUtils::MakeMaker
 cpan local:lib
 cpan JSON::RPC::Client
+cpan Convert::Ascii85
+apt-get install curl
 curl get.mojolicio.us | sh
 source ~/.bashrc (or restart shell)
 
