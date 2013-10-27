@@ -1,4 +1,4 @@
-## Install Dependencies
+####### Install Dependencies
 cpan ExtUtils::MakeMaker
 cpan local:lib
 cpan JSON::RPC::Client
@@ -7,14 +7,25 @@ apt-get install curl
 curl get.mojolicio.us | sh
 source ~/.bashrc (or restart shell)
 
-## Settings
+####### Settings
 Change settings in server.pl
 
-## Run
-morbo server.pl -m production
+####### Run
+### Debug / Development
+morbo server.pl
 
-The default port server.pl uses is 3000. If you want to change that add -l http://127.0.0.1:80
+The default port server.pl uses is 3000 in debug mode. If you want to change that add -l http://127.0.0.1:80
 
 -l, --listen <location>        Set one or more locations you want to listen
 				on, defaults to the value of MOJO_LISTEN or
 				"http://*:3000".
+
+### Production
+#Test
+hypnotoad server.pl  --test
+
+#Start (Default Port is 8080)
+hypnotoad server.pl
+
+#Stop
+hypnotoad server.pl --stop
