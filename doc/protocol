@@ -1,0 +1,6 @@
+Send a signed transaction as a multi-part SMS (mostly needed as it doesn't fit in 160 characters)
+encoded with gzip (https://en.wikipedia.org/wiki/Gzip)  and ASCII85 ( https://en.wikipedia.org/wiki/Ascii85).
+
+For an Android implementation see: https://github.com/schildbach/bitcoin-wallet
+
+If you implement SMS transaction in your app or you need any help email me (lucasbetschart@gmail.com).
