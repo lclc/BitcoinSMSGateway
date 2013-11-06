@@ -119,10 +119,10 @@ sub sendTransaction
   my $transaction = shift;
   
   my $sendObj = {
-   #   method  => 'sendrawtransaction',
-      method  => 'getinfo',
-   #   params  => $transaction
-      params  => []
+      method  => 'sendrawtransaction',
+   #   method  => 'getinfo',
+      params  => $transaction
+   #   params  => []
    };
   
   $log->info("Adding transaction to blockchain: ".$transaction);
